@@ -10,15 +10,25 @@ function App() {
       codeUrl: "Build/UnityTest.wasm",
     });
 
-  // Example: Listen for Unity → React message
   useEffect(() => {
-    function handleGameWon(event) {
-      alert("Unity says: " + event.detail);
-    }
+  function handleGameWon(event) {
+    alert("Unity says (GameWon): " + event.detail);
+  }
 
-    window.addEventListener("GameWon", handleGameWon);
-    return () => window.removeEventListener("GameWon", handleGameWon);
-  }, []);
+  function handleGameFinished(event) {
+    alert("Unity says (GameFinished): " + event.detail);
+  }
+
+  // ✅ Add both listeners
+  window.addEventListener("GameWon", handleGameWon);
+  window.addEventListener("GameFinished", handleGameFinished);
+
+  // ✅ Clean up both listeners
+  return () => {
+    window.removeEventListener("GameWon", handleGameWon);
+    window.removeEventListener("GameFinished", handleGameFinished);
+  };
+}, []);
 
   // Example: Send React → Unity message
   const handleSendMessage = () => {
